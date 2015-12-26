@@ -6,7 +6,7 @@ namespace mungebits {
     virtual void* serialize() = 0;
   };
 
-  class DoublerDatum : public Datum {
+  class MultiplierDatum : public Datum {
   public:
     void* serialize() {
       void* x = malloc(sizeof(double));
@@ -14,17 +14,20 @@ namespace mungebits {
       return x;
     }
 
-    DoublerDatum(double coeff) : coefficient(coeff) { }
+    MultiplierDatum(const double coeff) : coefficient(coeff) { }
+
+    const double getCoefficient() const { return this->coefficient; }
 
   private:
-    double coefficient;
+    const double coefficient;
   };
 }
 
 int main(int argc, char** argv) {
-  mungebits::DoublerDatum datum = mungebits::DoublerDatum(2.5);
+  mungebits::MultiplierDatum datum = mungebits::MultiplierDatum(2.5);
   double* out = (double*)datum.serialize();
   std::cout << *out << std::endl;
+  std::cout << datum.getCoefficient() << std::endl;
   return 0;
 }
 
