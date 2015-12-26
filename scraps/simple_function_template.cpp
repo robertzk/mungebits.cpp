@@ -14,7 +14,7 @@ public:
 
   // Functions are responsible for their own serialization and deserialization.
   virtual bool train(const double* data, const size_t &size, const void *train_args) = 0;
-  virtual const double* predict(const double* data, const void *predict_args) const = 0;
+  virtual const double* predict(std::vector<double> &data, const void *predict_args) const = 0;
 
   Mungebit() : trained(false) { }
   ~Mungebit() { std::free(input); }
@@ -30,7 +30,7 @@ class DoublerMungebit : public Mungebit {
     return true;
   }
 
-  double* predict(const double* data, const void *predict_args) const {
+  double* predict(std::vector<double> &data, const void *predict_args) const {
     double* output = (double*)std::malloc(sizeof(double) * 10);
     for (auto i = 0; i < 10; ++i) output[i] = i / 10.0;
     return output;
@@ -41,7 +41,7 @@ class DoublerMungebit : public Mungebit {
 
 int main(int argc, char** argv) {
   Mungebit *m = new DoublerMungebit();
-  const double* foo;
+  std::vector<double> foo = std::vector<double>(1.0, 2.0);
   const void* pa;
   const double* preds = m->predict(foo, pa); 
   for (auto i = 0; i < 10; ++i) std::cout << preds[i] << std::endl;
